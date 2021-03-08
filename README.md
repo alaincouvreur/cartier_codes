@@ -1,8 +1,10 @@
 # cartier_codes
 Magma programs to compute Cartier codes
+----------------------------------
 Author : Alain Couvreur
 Contact : alain.couvreur@inria.fr
 ----------------------------------
+
 
 copy these files in your current folder, open Magma and 
 > load "CartierCode.mgm";
