@@ -2,6 +2,7 @@
 Magma programs to compute Cartier codes
 ----------------------------------
 Author : Alain Couvreur
+
 Contact : alain.couvreur@inria.fr
 ----------------------------------
 
