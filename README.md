@@ -22,3 +22,9 @@ Then, create a Cartier code Car(P, G) over F_{p^r} with P a list of
 places of degree 1 and G a divisor on a curve by:
 
 > CartierCode(D, G, r);
+
+
+You can run an example presented in the article
+by running:
+
+> load "Klein.mgm";

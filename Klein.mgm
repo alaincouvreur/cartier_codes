@@ -1,0 +1,53 @@
+// This script produces the Klein Quartic over F_4,
+// together with some divisors
+// on it and computes the codes in the Example
+// of Section 7 of the article.
+
+
+load "CartierCode.mgm";
+
+F<w>:=FiniteField(8);
+P2<x,y,z>:=ProjectivePlane(F);
+C:=Curve(P2, x^3*y+y^3*z+z^3*x);
+Pl1:=Places(C,1);
+Pl2:=Places(C,2);
+
+// Evaluation Points
+Points := Pl1[4..#Pl1];
+
+// Divisors
+DivG := DivisorGroup(C);
+Gminus := &+[DivG!a : a in Pl1[1..3]];
+G0 := &+[DivG!a : a in Pl2[2..3]] + DivG!Pl2[5];
+
+printf "\nComputation of the codes.... ";
+
+// Cartier codes
+Code1 := CartierCode(Points, G0 - Gminus, 1);
+Code2 := CartierCode(Points, 2*G0 - Gminus, 1);
+
+// Subfield subcodes of Algebraic geometry
+// codes
+Code1bis := SubfieldSubcode(AGDualCode(Points, G0 - Gminus));
+Code2bis := SubfieldSubcode(AGDualCode(Points, G0 - Gminus));
+
+printf "[OK]";
+
+print "\n\n--------------------------\n\n";
+print "Code Cartier(G0 - Gminus)\n";
+print Code1;
+
+print "\n\n--------------------------\n\n";
+print "Code Cartier(2G0 - Gminus)\n";
+print Code2;
+
+print "\n\n--------------------------\n\n";
+print "Subfield subcode of COmega(G0 - Gminus)\n";
+print Code1bis;
+
+print "\n\n--------------------------\n\n";
+print "Subfield subcode of COmega(2G0 - Gminus)\n";
+print Code2bis;
+
+
+
