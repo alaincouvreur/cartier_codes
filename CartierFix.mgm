@@ -1,0 +1,75 @@
+// This function computes the differentials fixed by C^r
+// (where C is the Cartier operator) in
+// Some differential space Omega (D).
+
+//----------------------------------------------------
+// INPUTS: A divisor D, an integer r (r=1 by default)
+// A divisor D2 such that Cartier^r : Omega(D) -> Omega(D2)
+// OUTPUTS: The triple CartierBasis, OmD, g1, where:
+//          * OmD is the abstract space of dimension dim Omega(D)
+//          * g1 is the morphism OmD -> Omega(D)
+//          * Cartier Basis is an Fpr basis of elements
+//			  of OmD sent by g1 onto a basis of Cartier
+//			  invariant differentials
+//----------------------------------------------------
+
+//----------------------------------------------------
+//CAUTION: This function has been created
+// for the function CartierCode.
+// 
+//----------------------------------------------------
+
+function CartierFixPoints(D, D2, r)
+	 X:=Curve(D);
+	 F<w>:=BaseField(X);
+   	 p:=Characteristic(F);
+
+	 // The the approach is useless if r does not divide the
+	 // degree of the base field
+	 d:=Degree(F);	 
+	 assert d mod r eq 0;
+	 
+	 // We construct the subfield F_p^r of F_q = F_p^d.
+
+	 Fpr<t>:=sub<F | r>;
+	 FBasis := Basis(F, Fpr);
+
+	 // We compute the bases of spaces of differential forms
+
+	 OmD, g1  := DifferentialSpace(D);
+	 OmD2, g2 := DifferentialSpace(D2);
+
+	 // Now, compute the images of the elements of a basis
+	 // o_1,...,o_m
+	 // of Omega (D) by C^r-Id operator.
+	 // Since C^r is not F_q linear but only F_p linear
+	 // we also compute the images of ao_i where a
+	 // is in the basis of F_q/F_p^r computed before.
+
+	 DiffBasis := Basis(OmD);
+	 DiffBasis2 := Basis(OmD2);
+	 dimOmD := Dimension(OmD);
+	 dimOmD2 := Dimension(OmD2);
+	 L := [];
+	 
+	 // We construct a matrix whose rows represent
+	 // the elements C^r(omega) - omega in the Fpr-basis
+	 // of OmD2, where omega ranges over a basis of OmD.
+	 
+	 for om in DiffBasis do
+		for a in FBasis do
+			c := (Cartier(g1(a * om), r))@@g2 - (g1(a * om))@@g2;
+			Append(~L, &cat[ElementToSequence(c[i], Fpr) : i in {1..dimOmD2}]);
+		end for;
+	 end for;
+
+	 // Then we compute a kernel to get Cartier-fixed differentials.
+
+	 M := Matrix(Fpr, L);
+	 delete L;	
+	 CartierBasisFpr := Basis(NullSpace(M));
+	 DiffBasisFpr := &cat[[a*b : a in FBasis] : b in DiffBasis];
+	 CartierBasis := [ &+[u[i]*DiffBasisFpr[i] : i in {1..#DiffBasisFpr}] : u in CartierBasisFpr];	
+
+	 return CartierBasis, g1;
+end function;

@@ -1,0 +1,37 @@
+// This program Computes the Cartier Code Car_{p^r}(D,G).
+//-------------------------------------------------
+// INPUTS:
+//       * P: A list of places of degree 1;
+//		 * G a divisor;
+// 		 * the degree r of the base field of the
+// 		   code over its prime subfield
+// OUTPUT: The code Car(D, G)
+//-------------------------------------------------
+
+load "CartierFix.mgm";
+
+function CartierCode(P, G, r)
+	 C:=Curve(G);
+	 DegD:=#P;
+   	 D:=&+P;
+
+	 Gplus, Gminus := SignDecomposition(G);
+
+	 F<w> := BaseRing(C);
+	 Fpr := sub<F | r>;
+
+	 CartierBasis, g:=CartierFixPoints(G-D, -Gminus-D, r);
+
+	 if #CartierBasis eq 0 then
+	 	return LinearCode<Fpr, #P | []>;
+	 end if;
+
+	 L := [];
+	 for v in CartierBasis do
+	 	 omega := g(v);
+		 Append(~L, [ Fpr!Residue(omega, p) : p in P]);
+	 end for;
+
+	 M := Matrix(Fpr, L);
+	 return LinearCode(M);
+end function;
