@@ -1,13 +1,21 @@
 # cartier_codes
-Magma programs to compute Cartier codes
-----------------------------------
+************************************
 Author : Alain Couvreur
-
 Contact : alain.couvreur@inria.fr
-----------------------------------
+************************************
+
+************************************
+Description
+************************************
+Magma programs to compute Cartier codes
+as introduced in the article:
+
+Alain Couvreur. Codes and the Cartier Operator.
+Proc. Amer. Math. Soc. 142(6), 1983-1996, 2014. 
+************************************
 
 
-copy these files in your current folder, open Magma and 
+Open Magma and 
 > load "CartierCode.mgm";
 
 Then, create a Cartier code Car(P, G) over F_{p^r} with P a list of
